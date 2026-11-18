@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>信息基础知识 · 期中试卷讲评课件</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#ffffff; --ink:#1e293b; --ink2:#475569; --muted:#94a3b8;
+    --blue:#2563eb; --blue-d:#1d4ed8; --blue-l:#dbeafe;
+    --green:#16a34a; --green-l:#dcfce7; --red:#dc2626; --red-l:#fee2e2;
+    --amber:#d97706; --amber-l:#fef3c7; --line:#e2e8f0; --shadow:0 8px 30px rgba(30,41,59,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;
+    font-size:16px;font-weight:700;transition:.15s;white-space:nowrap}
+  .btn:active{transform:scale(.96)}
+  .btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+  .btn-blue:hover{background:var(--blue-d)}
+  .btn-amber{background:var(--amber);color:#fff;box-shadow:0 4px 12px rgba(217,119,6,.3)}
+  .btn-amber:hover{background:#b45309}
+  .btn-ghost{background:#f1f5f9;color:var(--ink2);border:1px solid var(--line)}
+  .btn-ghost:hover{background:#e2e8f0}
+
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;
+    background:linear-gradient(100deg,#1e3a8a,#2563eb);color:#fff;flex:0 0 auto;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .brand{font-size:21px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+  .brand .sub{font-size:13px;font-weight:500;opacity:.85;background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px}
+  .h-actions{display:flex;align-items:center;gap:12px}
+  .progress-pill{background:rgba(255,255,255,.18);padding:7px 16px;border-radius:20px;font-size:14px;font-weight:700}
+  .icon-btn{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.16);
+    display:grid;place-items:center;font-size:19px;transition:.15s}
+  .icon-btn:hover{background:rgba(255,255,255,.3)}
+
+  .type-tabs{display:flex;gap:8px;padding:12px 28px;background:var(--card);border-bottom:1px solid var(--line);flex:0 0 auto;overflow-x:auto}
+  .tab{padding:9px 18px;border-radius:22px;font-size:15px;font-weight:700;color:var(--ink2);
+    background:#f1f5f9;border:2px solid transparent;white-space:nowrap;transition:.15s}
+  .tab:hover{background:var(--blue-l)}
+  .tab.active{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+  .tab .cnt{font-size:12px;opacity:.8;margin-left:4px}
+
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:18px 28px;overflow:hidden;min-height:0}
+  .q-card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);width:100%;max-width:1180px;
+    height:100%;max-height:760px;padding:30px 38px;display:flex;flex-direction:column;overflow:hidden}
+
+  .q-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;flex:0 0 auto}
+  .q-no{font-size:17px;font-weight:800;color:var(--blue)}
+  .chip{padding:5px 13px;border-radius:8px;font-size:13px;font-weight:700}
+  .chip-type{background:var(--blue-l);color:var(--blue-d)}
+  .chip-score{background:var(--amber-l);color:var(--amber)}
+  .chip-done{background:var(--green-l);color:var(--green)}
+  .q-tools{margin-left:auto;display:flex;gap:10px}
+  .q-tools .btn{padding:9px 16px;font-size:14px}
+
+  .q-stem{font-size:27px;line-height:1.55;font-weight:600;margin:24px 0 18px;flex:0 0 auto}
+
+  .q-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;overflow-y:auto;flex:1 1 auto;align-content:start;padding-right:4px}
+  .q-options.single-col{grid-template-columns:1fr}
+  .opt{display:flex;align-items:center;gap:14px;text-align:left;padding:16px 20px;border-radius:14px;
+    background:#f8fafc;border:2px solid var(--line);font-size:21px;font-weight:600;color:var(--ink);
+    transition:.15s;min-height:64px;line-height:1.4}
+  .opt:hover{background:var(--blue-l);border-color:#93c5fd;transform:translateX(4px)}
+  .opt .key{flex:0 0 auto;width:38px;height:38px;border-radius:10px;background:#e2e8f0;color:var(--ink2);
+    display:grid;place-items:center;font-weight:800;font-size:18px}
+  .opt.correct{background:var(--green-l);border-color:var(--green)}
+  .opt.correct .key{background:var(--green);color:#fff}
+  .opt.wrong{background:var(--red-l);border-color:var(--red)}
+  .opt.wrong .key{background:var(--red);color:#fff}
+  .opt.dim{opacity:.55}
+  .opt.locked{cursor:default}
+  .opt.locked:hover{transform:none;background:#f8fafc;border-color:var(--line)}
+  .opt.locked.correct:hover{background:var(--green-l);border-color:var(--green)}
+  .opt.locked.wrong:hover{background:var(--red-l);border-color:var(--red)}
+  .mark-ok{color:var(--green);font-size:20px;margin-left:auto}
+  .mark-no{color:var(--red);font-size:20px;margin-left:auto}
+
+  .write-area{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+  .write-box{background:#f8fafc;border:2px dashed var(--line);border-radius:14px;padding:22px 26px;
+    font-size:20px;color:var(--ink2);line-height:1.8}
+  .write-label{font-size:15px;font-weight:800;color:var(--blue);margin-bottom:6px;letter-spacing:1px}
+  .blank-ans{color:var(--blue-d);font-weight:800;font-size:24px}
+
+  .answer-panel{margin-top:16px;background:#f8fafc;border:1px solid var(--line);border-radius:14px;
+    padding:18px 22px;flex:0 0 auto;max-height:34%;overflow-y:auto;display:none}
+  .answer-panel.show{display:block;animation:fade .25s}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ans-line{font-size:19px;font-weight:800;margin-bottom:8px}
+  .ans-line .val{color:var(--green);font-size:22px}
+  .exp-line{font-size:17px;line-height:1.7;color:var(--ink2);white-space:pre-wrap}
+  .exp-tag{display:inline-block;background:var(--blue-l);color:var(--blue-d);font-size:13px;font-weight:800;
+    padding:3px 10px;border-radius:6px;margin-bottom:8px}
+
+  .submit-row{margin-top:14px;flex:0 0 auto;display:flex;gap:10px;align-items:center}
+
+  .q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;flex:0 0 auto;gap:12px}
+  .q-nav .btn{padding:12px 24px;font-size:16px}
+  .nav-center{display:flex;gap:10px}
+
+  .num-bar{display:flex;justify-content:flex-start;padding:8px 28px 12px;flex:0 0 auto;overflow-x:auto;overflow-y:hidden}
+  .num-grid{display:flex;gap:6px;flex-wrap:nowrap;justify-content:flex-start}
+  .num{width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid var(--line);
+    font-size:13px;font-weight:700;color:var(--ink2);transition:.12s}
+  .num:hover{background:var(--blue-l);transform:translateY(-2px)}
+  .num.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .num.ok{background:var(--green);color:#fff;border-color:var(--green)}
+  .num.no{background:var(--red);color:#fff;border-color:var(--red)}
+
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.72);display:none;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(3px)}
+  .modal.show{display:flex;animation:fade .2s}
+  .modal-box{background:#fff;border-radius:24px;padding:36px 44px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);min-width:420px}
+  .modal-box h2{font-size:22px;color:var(--ink2);margin-bottom:22px}
+  .roll-name{font-size:64px;font-weight:900;color:var(--blue);letter-spacing:4px;min-height:84px;line-height:1.3;
+    background:linear-gradient(100deg,#1e3a8a,#2563eb);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .rolling .roll-name{color:var(--muted);-webkit-text-fill-color:var(--muted)}
+  .roll-id{font-size:18px;color:var(--ink2);font-weight:700;margin:6px 0 26px;letter-spacing:2px}
+  .modal-actions{display:flex;gap:12px;justify-content:center}
+  .pick-hint{font-size:14px;color:var(--muted);margin-top:16px}
+
+  .settings{text-align:left;min-width:560px;max-width:640px;max-height:88vh;overflow-y:auto}
+  .settings h2{text-align:left;color:var(--ink);font-size:22px;margin-bottom:6px}
+  .set-desc{font-size:13px;color:var(--muted);text-align:left;margin-bottom:20px;line-height:1.6}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:14px;font-weight:700;color:var(--ink2);margin-bottom:6px}
+  .field input,.field select{width:100%;padding:10px 12px;border:2px solid var(--line);border-radius:10px;font-size:15px;color:var(--ink);font-family:inherit}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--blue)}
+  .field-row{display:flex;gap:12px}.field-row .field{flex:1}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;padding:11px;border-radius:10px;background:#f1f5f9;font-weight:700;color:var(--ink2);border:2px solid transparent}
+  .seg button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .volcano-box{border:1px solid var(--line);border-radius:14px;padding:16px;background:#f8fafc;margin-top:8px}
+  .set-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+  .note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:8px}
+
+  .toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);
+    background:#0f172a;color:#fff;padding:12px 24px;border-radius:12px;font-size:15px;font-weight:700;
+    opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{background:var(--green)}.toast.no{background:var(--red)}
+
+  @media(max-width:900px){
+    .q-stem{font-size:21px;margin:16px 0 12px}
+    .opt{font-size:17px;padding:12px 14px;min-height:54px}
+    .opt .key{width:32px;height:32px;font-size:16px}
+    .q-card{padding:18px 16px;border-radius:16px}
+    .q-tools{margin-left:0;width:100%;flex-wrap:wrap}
+    .q-tools .btn{flex:1;justify-content:center;padding:9px 10px;font-size:13px}
+  }
+  /* 手机竖屏：允许整页滚动，题目区优先，题号栏单行横滑 */
+  @media(max-width:600px){
+    body{height:100vh;overflow:hidden}
+    header{padding:10px 14px;flex-wrap:nowrap}
+    .brand{font-size:15px;gap:6px}
+    .brand .sub{display:none}
+    .h-actions{gap:6px}
+    .progress-pill{padding:6px 10px;font-size:12px}
+    .icon-btn{width:34px;height:34px;font-size:16px}
+    .type-tabs{padding:8px 12px;gap:6px}
+    .tab{padding:7px 13px;font-size:13px}
+    main{padding:10px 12px;align-items:stretch}
+    .q-card{max-height:none;height:100%;padding:16px 14px;border-radius:14px}
+    .q-head{gap:8px}
+    .q-no{font-size:15px}
+    .chip{padding:4px 9px;font-size:12px}
+    .q-stem{font-size:19px;line-height:1.5;margin:14px 0 10px}
+    .q-options{gap:9px}
+    .opt{font-size:16px;padding:11px 12px;min-height:50px}
+    .opt .key{width:30px;height:30px;font-size:15px}
+    .q-nav{margin-top:12px;gap:6px;flex-wrap:wrap}
+    .q-nav .btn{padding:10px 12px;font-size:13px;flex:1;justify-content:center}
+    .nav-center{flex:1 1 100%;order:3}
+    .nav-center .btn{flex:1}
+    .num-bar{padding:6px 12px 10px}
+    .num{width:32px;height:32px;font-size:12px;flex:0 0 auto}
+    .answer-panel{padding:12px 14px;max-height:40%}
+    .ans-line{font-size:16px}.exp-line{font-size:14px}
+    .write-box{padding:14px;font-size:16px}
+    .modal-box{min-width:0;width:90vw;padding:26px 20px}
+    .roll-name{font-size:44px;min-height:60px}
+    .settings{min-width:0;width:94vw;padding:20px 16px}
+    .field-row{flex-direction:column;gap:0}
+    .seg button{font-size:12px;padding:9px 6px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">📚 信息基础知识 · 期中试卷讲评
+    <span class="sub">2025级 · 103题</span></div>
+  <div class="h-actions">
+    <div class="progress-pill">进度 <span id="progressText">1 / 103</span></div>
+    <button class="icon-btn" id="btnSettings" title="朗读与音色设置">⚙️</button>
+    <button class="icon-btn" id="btnFull" title="全屏">⛶</button>
+  </div>
+</header>
+
+<div class="type-tabs" id="typeTabs"></div>
+
+<main>
+  <div class="q-card">
+    <div class="q-head">
+      <span class="q-no" id="qNo">第 1 题</span>
+      <span class="chip chip-type" id="qType">单选题</span>
+      <span class="chip chip-score" id="qScore">1 分</span>
+      <span class="chip chip-done" id="qDone" style="display:none">✓ 已作答</span>
+      <div class="q-tools">
+        <button class="btn btn-ghost" id="btnRead">🔊 朗读题目</button>
+        <button class="btn btn-amber" id="btnPick">🎲 随机抽人</button>
+      </div>
+    </div>
+
+    <div class="q-stem" id="qStem"></div>
+
+    <div class="q-options" id="qOptions"></div>
+
+    <div class="write-area" id="writeArea" style="display:none">
+      <div class="write-box" id="writeBox"></div>
+    </div>
+
+    <div class="submit-row" id="submitRow" style="display:none">
+      <button class="btn btn-blue" id="btnSubmit">✓ 提交答案</button>
+      <span style="color:var(--muted);font-size:14px" id="multiHint">可多选，选好后提交</span>
+    </div>
+
+    <div class="answer-panel" id="answerPanel">
+      <div class="ans-line">正确答案：<span class="val" id="ansVal"></span></div>
+      <div class="exp-line"><span class="exp-tag">解析</span><br><span id="expVal"></span></div>
+    </div>
+
+    <div class="q-nav">
+      <button class="btn btn-ghost" id="btnPrev">◀ 上一题</button>
+      <div class="nav-center">
+        <button class="btn btn-blue" id="btnToggleAns">💡 显示答案解析</button>
+        <button class="btn btn-ghost" id="btnReadAns">🔊 读解析</button>
+      </div>
+      <button class="btn btn-blue" id="btnNext">下一题 ▶</button>
+    </div>
+  </div>
+</main>
+
+<div class="num-bar"><div class="num-grid" id="numGrid"></div></div>
+
+<!-- 抽人模态框 -->
+<div class="modal" id="pickModal">
+  <div class="modal-box" id="pickBox">
+    <h2>🎲 随机抽人 · 请上台作答</h2>
+    <div class="roll-name" id="rollName">准备抽取…</div>
+    <div class="roll-id" id="rollId">&nbsp;</div>
+    <div class="modal-actions">
+      <button class="btn btn-amber" id="btnRollAgain">🎲 再抽一次</button>
+      <button class="btn btn-ghost" id="btnClosePick">关闭</button>
+    </div>
+    <div class="pick-hint">已抽取 <span id="drawnCount">0</span> / 36 人 · <button id="btnResetDrawn" style="text-decoration:underline;color:var(--blue)">重置名单</button></div>
+  </div>
+</div>
+
+<!-- 设置模态框 -->
+<div class="modal" id="setModal">
+  <div class="modal-box settings">
+    <h2>⚙️ 朗读与音色设置</h2>
+    <p class="set-desc">朗读默认使用浏览器语音，即开即用；如需“火山引擎”公开音色，请填入控制台的 AppID / AccessToken 后切换。所有设置自动保存在本机。</p>
+
+    <div class="field">
+      <label>朗读引擎</label>
+      <div class="seg" id="engineSeg">
+        <button data-engine="freevolc" class="active">火山免费音色（推荐）</button>
+        <button data-engine="browser">浏览器语音</button>
+        <button data-engine="volcano">火山官方 API</button>
+      </div>
+    </div>
+
+    <div class="volcano-box" id="freevolcBox">
+      <div class="field">
+        <label>火山免费音色（translate.volcengine.com 公开接口，免鉴权）</label>
+        <select id="fvVoice">
+          <option value="zh_female_qingxin">清新女声 · 中英混</option>
+          <option value="zh_female_zhubo">女主播 · 中英混</option>
+          <option value="zh_male_zhubo">男主播 · 中英混</option>
+          <option value="zh_female_story">少儿故事 · 中英混</option>
+          <option value="zh_male_xiaoming">影视男解说 · 中英混</option>
+          <option value="zh_female_sichuan">四川女声 · 川英混</option>
+          <option value="zh_male_rap">嘻哈男歌手 · 中英混</option>
+        </select>
+      </div>
+      <p class="note">如朗读失败（该公开接口偶发不稳定），将自动切换到浏览器语音，不影响上课。</p>
+    </div>
+
+    <div id="browserBox">
+      <div class="field">
+        <label>中文语音</label>
+        <select id="voiceSelect"></select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>语速 <span id="rateVal">1.0</span></label>
+          <input type="range" id="rateRange" min="0.6" max="1.6" step="0.1" value="1.0"></div>
+        <div class="field"><label>音调 <span id="pitchVal">1.0</span></label>
+          <input type="range" id="pitchRange" min="0.6" max="1.6" step="0.1" value="1.0"></div>
+      </div>
+    </div>
+
+    <div class="volcano-box" id="volcanoBox" style="display:none">
+      <div class="field-row">
+        <div class="field"><label>AppID</label><input id="vAppid" placeholder="火山控制台 AppID"></div>
+        <div class="field"><label>AccessToken</label><input id="vToken" type="password" placeholder="访问令牌"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Cluster</label><input id="vCluster" value="volcano_tts"></div>
+        <div class="field"><label>音色 VoiceType</label>
+          <select id="vVoice">
+            <option value="BV700_streaming">BV700 通用女声（豆包）</option>
+            <option value="BV701_streaming">BV701 通用男声</option>
+            <option value="BV705_streaming">BV705 甜美女声</option>
+            <option value="BV406_streaming">BV406 阳光青年</option>
+            <option value="BV407_streaming">BV407 甜美小源</option>
+            <option value="BV158_streaming">BV158 儒雅青年</option>
+            <option value="custom">自定义…</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" id="vCustomWrap" style="display:none"><label>自定义 VoiceType</label><input id="vCustom" placeholder="如 BV700_streaming"></div>
+      <p class="note">鉴权信息仅保存在本机浏览器，不会上传。火山接口需控制台开通语音合成服务；若调用失败，可切回浏览器语音。</p>
+    </div>
+
+    <div class="field" style="margin-top:12px">
+      <label style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="sfxCheck" checked style="width:auto"> 开启答题音效（正确/错误提示音）</label>
+    </div>
+
+    <div class="set-actions">
+      <button class="btn btn-ghost" id="btnTestVoice">🔊 试听</button>
+      <button class="btn btn-blue" id="btnCloseSet">完成</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== 题库数据 ===================== */
+const QUESTIONS = [{"no": 1, "type": "single", "q": "《中华人民共和国网络安全法》开始施行的时间是（ ）。", "opts": ["A. 2015年", "B. 2016年", "C. 2017年", "D. 2018年"], "ans": "C", "exp": "《网络安全法》由全国人大常委会通过，自 2017 年 6 月 1 日起施行，故选 C。"}, {"no": 2, "type": "single", "q": "在资源管理器中，双击一个扩展名为.txt的文件，系统会自动启动（ ）来打开该文件", "opts": ["A. 画图程序", "B. 记事本", "C. Word", "D. Excel"], "ans": "B", "exp": ".txt 是纯文本文件，Windows 默认用「记事本」打开。"}, {"no": 3, "type": "single", "q": "我们现在使用的计算机属于第几代？（ ）", "opts": ["A. 第一代", "B. 第二代", "C. 第三代", "D. 第四代"], "ans": "D", "exp": "现代计算机采用大规模/超大规模集成电路，属于第四代计算机。"}, {"no": 4, "type": "single", "q": "下列文件中，属于可执行文件的是（ ）。", "opts": ["A. setup.exe", "B. readme.txt", "C. photo.jpg", "D. data.xlsx"], "ans": "A", "exp": ".exe 是 Windows 系统可执行文件的扩展名。"}, {"no": 5, "type": "single", "q": "GPS导航属于信息技术在哪个领域的应用？（ ）", "opts": ["A. 医疗卫生", "B. 日常生活", "C. 交通运输", "D. 工业生产"], "ans": "C", "exp": "GPS 导航主要用于定位与路线指引，属于交通运输领域的应用。"}, {"no": 6, "type": "single", "q": "【拔高】在GBK编码中，一个汉字占几个字节？（ ）", "opts": ["A. 1个", "B. 2个", "C. 3个", "D. 4个"], "ans": "B", "exp": "GBK 是我国的汉字编码标准，一个汉字占 2 个字节；UTF-8 中一个汉字通常占 3 字节。"}, {"no": 7, "type": "single", "q": "下列设备中，属于输出设备的是（ ）。", "opts": ["A. 鼠标", "B. 扫描仪", "C. 麦克风", "D. 显示器"], "ans": "D", "exp": "显示器用于输出信息；鼠标、扫描仪、麦克风都是输入设备。"}, {"no": 8, "type": "single", "q": "信息技术的英文缩写是（ ）。", "opts": ["A. IT", "B. CT", "C. BT", "D. AI"], "ans": "A", "exp": "Information Technology 缩写为 IT。AI 是人工智能的缩写。"}, {"no": 9, "type": "single", "q": "文件“报告.pdf”的扩展名是（ ）。", "opts": ["A. 报告", "B. .pdf", "C. pdf", "D. 报告.pdf"], "ans": "B", "exp": "文件名与扩展名用「.」分隔，扩展名是 .pdf。讲评提示：若按“不含点”的写法则为 C，本卷取带点的规范写法 B。"}, {"no": 10, "type": "single", "q": "要将一个文件从一个文件夹移动到另一个文件夹，可使用的快捷键是（ ）", "opts": ["A. Ctrl+C", "B. Ctrl+X", "C. Ctrl+V", "D. Ctrl+A"], "ans": "B", "exp": "Ctrl+X 是剪切（移动）；Ctrl+C 复制，Ctrl+V 粘贴，Ctrl+A 全选。"}, {"no": 11, "type": "single", "q": "我们现在使用的计算机属于第几代计算机？（ ）", "opts": ["A. 第一代（电子管）", "B. 第二代（晶体管）", "C. 第三代（集成电路）", "D. 第四代（大规模/超大规模集成电路）"], "ans": "D", "exp": "现代计算机是第四代，采用大规模/超大规模集成电路。与第 3 题考查点相同。"}, {"no": 12, "type": "single", "q": "在Windows中，显示桌面的快捷键是（ ）。", "opts": ["A. Win+D", "B. Win+E", "C. Win+L", "D. Alt+F4"], "ans": "A", "exp": "Win+D 快速显示/切换桌面；Win+E 打开资源管理器，Win+L 锁定屏幕。"}, {"no": 13, "type": "single", "q": "ARPANET建立于（ ）年。", "opts": ["A. 1946", "B. 1956", "C. 1969", "D. 1989"], "ans": "C", "exp": "阿帕网 ARPANET 建于 1969 年，是 Internet 的前身。"}, {"no": 14, "type": "single", "q": "已知大写字母“A”的ASCII码是65，小写字母“a”的ASCII码是97，那么大写字母“E”的ASCII码是（ ）。", "opts": ["A. 68", "B. 69", "C. 70", "D. 101"], "ans": "B", "exp": "字母按顺序连续编码，A=65，E 是第 5 个大写字母，65+4=69。"}, {"no": 15, "type": "single", "q": "十进制数25转换为二进制是 ( )。", "opts": ["A. 11001", "B. 11010", "C. 11100", "D. 11111"], "ans": "A", "exp": "25=16+8+1，对应二进制 11001。可用“除 2 取余法”验证。"}, {"no": 16, "type": "single", "q": "信息技术在医疗领域的应用主要有（ ）", "opts": ["A. 远程医疗", "B. 医疗信息化管理", "C. 医疗设备智能化", "D. 以上都是"], "ans": "D", "exp": "远程医疗、信息化管理、设备智能化都属于信息技术在医疗领域的应用。"}, {"no": 17, "type": "single", "q": "将文件属性设置为“只读”后，该文件（ ）。", "opts": ["A. 不能被打开", "B. 不能被读取", "C. 不能被修改或删除", "D. 不能被复制"], "ans": "C", "exp": "只读属性限制修改和删除，但仍可打开、读取、复制。"}, {"no": 18, "type": "single", "q": "信息高速公路主要体现了信息技术中的（ ）", "opts": ["A. 计算机技术", "B. 通信技术", "C. 传感技术", "D. 控制技术"], "ans": "B", "exp": "信息高速公路指高速通信网络，核心是通信技术。"}, {"no": 19, "type": "single", "q": "用于将域名转换为IP 地址的协议是 ( )。", "opts": ["A. HTTP", "B. FTP", "C. TCP", "D. DNS"], "ans": "D", "exp": "DNS（域名系统）负责把域名解析为 IP 地址。"}, {"no": 20, "type": "single", "q": "在 DNS 中，以下（ ）记录是用来指定主机名(或域名)对应的 IP 地址记录。", "opts": ["A. A", "B. CNAME", "C. MX", "D. PTR"], "ans": "A", "exp": "A 记录（Address）把域名指向 IPv4 地址；CNAME 是别名，MX 是邮件交换，PTR 是反向解析。"}, {"no": 21, "type": "single", "q": "交换机根据（ ）地址来转发数据帧，该地址表是通过（ ）过程建立的。", "opts": ["A. IP，路由学习", "B. MAC，地址学习", "C. 端口，手动配置", "D. 域名，DNS解析"], "ans": "B", "exp": "交换机工作在数据链路层，依据 MAC 地址转发，通过“地址学习”自动建立 MAC 地址表。"}, {"no": 22, "type": "single", "q": "下列拓扑结构中，可靠性最高的是（ ）。", "opts": ["A. 总线型", "B. 星型", "C. 环型", "D. 网状"], "ans": "D", "exp": "网状拓扑节点间有多条路径互联，单点故障不影响整体，可靠性最高。"}, {"no": 23, "type": "single", "q": "下列 MAC 地址正确的是（ ）。", "opts": ["A. 00-16-5C-4A-44-2H", "B. 65-10-96-42-32", "C. 00-10-4C-5A-54-AC", "D. 22-35-10-4A"], "ans": "C", "exp": "MAC 地址为 6 组两位十六进制数（0-9、A-F）。A 含非法字符 H，B、D 组数不足。"}, {"no": 24, "type": "single", "q": "C类IP地址最多可容纳（ ）台可用主机。", "opts": ["A. 254", "B. 255", "C. 256", "D. 65534"], "ans": "A", "exp": "C 类地址主机位 8 位，可用主机数 = 2⁸−2 = 254（去掉网络号和广播地址）。"}, {"no": 25, "type": "single", "q": "某信道的频率范围是500Hz~4000Hz，该信道的带宽是（ ）。", "opts": ["A. 500Hz", "B. 3500Hz", "C. 4000Hz", "D. 4500Hz"], "ans": "B", "exp": "带宽 = 最高频率 − 最低频率 = 4000 − 500 = 3500Hz。"}, {"no": 26, "type": "single", "q": "计算机网络共享的资源是（ ）。", "opts": ["A. 路由器、交换机", "B. 域名、网络地址与MAC地址", "C. 计算机的文件与数据", "D. 计算机的软件、硬件与数据"], "ans": "D", "exp": "计算机网络共享的资源包括硬件资源、软件资源和数据资源。"}, {"no": 27, "type": "single", "q": "在TCP/IP四层模型中，IP协议工作在（ ）。", "opts": ["A. 应用层", "B. 传输层", "C. 网络层", "D. 网络接口层"], "ans": "C", "exp": "IP 协议是网络层的核心协议，负责寻址和路由。"}, {"no": 28, "type": "single", "q": "TCP/IP参考模型自下而上依次分为（ ）", "opts": ["A. 网络接口层→网络层→传输层→应用层", "B. 应用层→传输层→网络层→网络接口层", "C. 物理层→数据链路层→网络层→传输层→会话层→表示层→应用层", "D. 网络层→传输层→应用层"], "ans": "A", "exp": "TCP/IP 四层模型自下而上：网络接口层、网络层、传输层、应用层。C 选项是 OSI 七层模型。"}, {"no": 29, "type": "single", "q": "协同编辑软件的主要目的是（ ）。", "opts": ["A. 让用户独自完成复杂文档编辑", "B. 方便多个用户同时编辑一个文档", "C. 快速生成文档模板", "D. 进行文档格式转换"], "ans": "B", "exp": "协同编辑支持多个用户实时共同编辑同一个文档。"}, {"no": 30, "type": "single", "q": "ping 命令的参数 -t 是指（ ）。", "opts": ["A. 指定发送数据的大小", "B. 指定发送报文的数量", "C. 将 IP 地址解析为计算机名", "D. 不断地向指定的计算机发送报文"], "ans": "D", "exp": "ping -t 会持续不断地向目标发送测试报文，直到手动按 Ctrl+C 停止。"}, {"no": 31, "type": "single", "q": "广域网的英文简称是（ ）", "opts": ["A. LAN", "B. MAN", "C. WAN", "D. WLAN"], "ans": "C", "exp": "WAN=广域网；LAN=局域网，MAN=城域网，WLAN=无线局域网。"}, {"no": 32, "type": "single", "q": "在Windows中，释放DHCP获取的IP地址的命令是（ ）。", "opts": ["A. ipconfig /release", "B. ipconfig /renew", "C. ipconfig /flushdns", "D. ipconfig /all"], "ans": "A", "exp": "/release 释放已获取的 IP；/renew 重新获取；/flushdns 清除 DNS 缓存。"}, {"no": 33, "type": "single", "q": "下列动态路由协议中，属于链路状态协议的是（ ）。", "opts": ["A. RIP", "B. OSPF", "C. BGP", "D. PPP"], "ans": "B", "exp": "OSPF 是链路状态协议；RIP 是距离矢量协议；PPP 是数据链路层协议。"}, {"no": 34, "type": "single", "q": "用作回送测试的 IP 地址是（ ）。", "opts": ["A. 212.0.0.0", "B. 158.0.0.0", "C. 20.0.0.0", "D. 127.0.0.1"], "ans": "D", "exp": "127.0.0.1 是本机的回送（loopback）地址，指向本机自身。"}, {"no": 35, "type": "single", "q": "下列关于交换机的说法，正确的是（ ）。", "opts": ["A. 交换机所有端口共享带宽", "B. 交换机可以隔离广播域", "C. 交换机的每个端口是一个独立的冲突域", "D. 交换机工作在网络层"], "ans": "C", "exp": "交换机每个端口是一个独立冲突域；不能隔离广播域（那是路由器的功能）；工作在数据链路层。"}, {"no": 36, "type": "single", "q": "能实现数—模转换和模—数转换的设备的是（ ）。", "opts": ["A. Modem", "B. 中继器", "C. 集线器", "D. 路由器"], "ans": "A", "exp": "调制解调器 Modem 实现数字信号与模拟信号的相互转换（调制/解调）。"}, {"no": 37, "type": "single", "q": "在大数据的分析方法中，以下不是数据处理与分析的目的的是 ( )。", "opts": ["A. 发现数据中的模式", "B. 预测未来趋势", "C. 识别异常行为", "D. 隐藏数据信息"], "ans": "D", "exp": "发现模式、预测趋势、识别异常都是分析目的；“隐藏数据信息”不是。"}, {"no": 38, "type": "single", "q": "下列关于大数据的说法，错误的是（ ）。", "opts": ["A. 大数据的数据量通常在TB/PB级别以上", "B. 大数据要求实时或近实时处理", "C. 大数据只包含结构化数据", "D. 大数据需要专门的技术和工具处理"], "ans": "C", "exp": "大数据包含结构化、半结构化和非结构化数据，“只包含结构化数据”说法错误。"}, {"no": 39, "type": "single", "q": "以下不属于大数据“5V”特点的是（ ）。", "opts": ["A. 可视化（visualization）", "B. 大量（volume）", "C. 高速（velocity）", "D. 价值（value）"], "ans": "A", "exp": "大数据 5V：Volume 大量、Velocity 高速、Variety 多样、Value 价值、Veracity 真实性。可视化不属于 5V。"}, {"no": 40, "type": "single", "q": "以下不是人工智能的特征的是（ ）。", "opts": ["A. 自主性", "B. 原创性", "C. 适应性", "D. 预测性"], "ans": "B", "exp": "人工智能具有自主性、适应性、学习与预测能力等，“原创性”不是其典型特征。"}, {"no": 41, "type": "single", "q": "以下不是信息安全常见威胁的是（ ）。", "opts": ["A. 病毒", "B. 木马", "C. 太阳风暴", "D. 钓鱼攻击"], "ans": "C", "exp": "太阳风暴是自然现象，不属于信息安全威胁；病毒、木马、钓鱼攻击都是。"}, {"no": 42, "type": "single", "q": "以下不是人工智能的特点的是（ ）。", "opts": ["A. 绝对准确性", "B. 学习能力", "C. 逻辑推理", "D. 自主决策"], "ans": "A", "exp": "AI 也可能出错，不具备“绝对准确性”。"}, {"no": 43, "type": "single", "q": "信息安全的核心目标不包括（ ）。", "opts": ["A. 保密性", "B. 完整性", "C. 可用性", "D. 易用性"], "ans": "D", "exp": "信息安全三要素 CIA：保密性(Confidentiality)、完整性(Integrity)、可用性(Availability)。易用性不属于。"}, {"no": 44, "type": "single", "q": "大数据的分析理念中，以下不是其核心的是 ( )。", "opts": ["A. 相关性", "B. 因果关系分析", "C. 预测性分析", "D. 描述性分析"], "ans": "B", "exp": "大数据分析强调“相关关系”而非严格的因果关系，因果关系分析不是其核心理念。"}, {"no": 45, "type": "single", "q": "服务器因遭受DDoS攻击而无法正常访问，这主要破坏了信息的（ ）。", "opts": ["A. 保密性", "B. 完整性", "C. 可用性", "D. 不可否认性"], "ans": "C", "exp": "DDoS 使服务无法正常访问，破坏的是信息的可用性。"}, {"no": 46, "type": "single", "q": "信息安全的核心目标是 ( )。", "opts": ["A. 保护数据完整性", "B. 保护数据可用性", "C. 保护数据保密性", "D. 以上都是"], "ans": "D", "exp": "保密性、完整性、可用性（CIA）共同构成信息安全的核心目标。"}, {"no": 47, "type": "single", "q": "Spark与MapReduce相比，最大的优势是（ ）。", "opts": ["A. 基于内存计算，速度更快", "B. 支持更多编程语言", "C. 存储容量更大", "D. 更容易安装"], "ans": "A", "exp": "Spark 基于内存计算，比基于磁盘中间结果的 MapReduce 快很多。"}, {"no": 48, "type": "single", "q": "AlphaGo主要使用的技术是（ ）。", "opts": ["A. 专家系统", "B. 深度学习", "C. 规则匹配", "D. 数据库查询"], "ans": "B", "exp": "AlphaGo 的核心是深度学习结合强化学习。"}, {"no": 49, "type": "single", "q": "以下关于大数据的说法正确的是（ ）。", "opts": ["A. 大数据就是大量的数据", "B. 大数据只包括结构化数据", "C. 大数据可以用常规软件工具进行处理的数据集合", "D. 大数据的价值在于对其进行分析和挖掘"], "ans": "D", "exp": "大数据的关键在于从海量、多类型数据中分析挖掘出价值，而不仅是“量大”。"}, {"no": 50, "type": "single", "q": "使用带标签数据训练模型的机器学习方法是（ ）。", "opts": ["A. 监督学习", "B. 无监督学习", "C. 强化学习", "D. 迁移学习"], "ans": "A", "exp": "使用带标签数据训练的是监督学习；无监督学习处理无标签数据。"}, {"no": 51, "type": "single", "q": "正式实施《网络安全法》是在（ ）。", "opts": ["A. 2020年1月1日", "B. 2016年7月1日", "C. 2017年6月1日", "D. 2019年1月6日"], "ans": "C", "exp": "《网络安全法》自 2017 年 6 月 1 日起施行。与第 1 题考查点相同。"}, {"no": 52, "type": "single", "q": "电商平台的“猜你喜欢”个性化推荐功能，主要体现了大数据的哪个应用？", "opts": ["A. 风险控制", "B. 精准营销", "C. 疾病预测", "D. 交通优化"], "ans": "B", "exp": "基于用户行为的个性化推荐属于精准营销。"}, {"no": 53, "type": "single", "q": "以下人工智能技术用于理解和生成人类语言的是 ( )。", "opts": ["A. 机器学习", "B. 计算机视觉", "C. 自然语言处理", "D. 知识图谱"], "ans": "C", "exp": "NLP（自然语言处理）负责让机器理解、生成人类语言。"}, {"no": 54, "type": "single", "q": "OpenCV主要用于（ ）。", "opts": ["A. 自然语言处理", "B. 计算机视觉", "C. 语音识别", "D. 知识图谱"], "ans": "B", "exp": "OpenCV 是常用的开源计算机视觉库。"}, {"no": 55, "type": "single", "q": "大数据的数据量通常以（ ）为单位计量。", "opts": ["A. KB（千字节）", "B. MB（兆字节）", "C. GB（吉字节）", "D. PB（拍字节）及以上"], "ans": "D", "exp": "大数据的数据量通常在 TB、PB 及以上级别计量。"}, {"no": 56, "type": "single", "q": "目前广泛应用的人脸识别、语音助手属于（ ）。", "opts": ["A. 弱人工智能", "B. 强人工智能", "C. 超人工智能", "D. 通用人工智能"], "ans": "A", "exp": "当前应用多为面向特定任务的弱人工智能（专用 AI，ANI）。"}, {"no": 57, "type": "single", "q": "我国网络安全等级保护制度将信息系统的安全保护等级分为（ ）级。", "opts": ["A. 三", "B. 四", "C. 五", "D. 六"], "ans": "C", "exp": "等保 2.0 将信息系统安全保护等级分为五级。"}, {"no": 58, "type": "single", "q": "图灵测试的目的是（ ）。", "opts": ["A. 测试计算机的运算速度", "B. 判断机器是否具有智能", "C. 测试网络带宽", "D. 测试软件的稳定性"], "ans": "B", "exp": "图灵测试用于判断机器能否表现出与人类无法区分的智能行为。"}, {"no": 59, "type": "single", "q": "防火墙的安全规则设置过于严格，可能导致的问题是（ ）", "opts": ["A. 内部攻击防护不足", "B. 数据驱动型攻击防护不足", "C. 新安全问题应对不足", "D. 限制有用服务"], "ans": "D", "exp": "规则过严会误拦截正常、有用的服务访问，影响业务。"}, {"no": 60, "type": "single", "q": "通过自我复制并传播到其他计算机来破坏系统功能或窃取数据的（ ）。", "opts": ["A. 病毒和蠕虫", "B. 木马程序", "C. 钓鱼攻击", "D. 拒绝服务攻击"], "ans": "A", "exp": "病毒和蠕虫的典型特征是自我复制并传播；木马侧重隐蔽潜伏。"}, {"no": 61, "type": "multi", "q": "下列属于应用软件的有（ ）。", "opts": ["A. Word", "B. Excel", "C. Windows", "D. Photoshop"], "ans": "ABD", "exp": "Word、Excel、Photoshop 是应用软件；Windows 是系统软件。"}, {"no": 62, "type": "multi", "q": "下列设备中，属于输出设备的有（ ）。", "opts": ["A. 显示器", "B. 打印机", "C. 音箱", "D. 麦克风"], "ans": "ABC", "exp": "显示器、打印机、音箱是输出设备；麦克风是输入设备。"}, {"no": 63, "type": "multi", "q": "以下命令可以测试本地主机与另一台主机的连接状态的是（ ）。", "opts": ["A. ping", "B. tracert", "C. ipconfig", "D. nslookup", "E. netstat"], "ans": "AB", "exp": "ping 测试连通性，tracert 跟踪到达路径；ipconfig 查看本机配置，nslookup 查询域名，netstat 查看本机连接状态（非主动测试工具）。讲评提示：若把“查看连接状态”也算入，可选 E。"}, {"no": 64, "type": "multi", "q": "下列域名中，表示中国机构的是（ ）。", "opts": ["A. .com.cn", "B. .edu.cn", "C. .gov.cn", "D. .org"], "ans": "ABC", "exp": "含 .cn 的是中国国家顶级域名下的人口；.org 是国际通用组织域名。"}, {"no": 65, "type": "multi", "q": "按覆盖范围分类，计算机网络可分为（ ）。", "opts": ["A. 局域网", "B. 城域网", "C. 广域网", "D. 以太网"], "ans": "ABC", "exp": "按覆盖范围分 LAN（局域网）、MAN（城域网）、WAN（广域网）；以太网是按技术/介质分类。"}, {"no": 66, "type": "multi", "q": "以下事件标志着人工智能的早期发展的有（ ）。", "opts": ["A. 图灵测试的提出", "B. 人工智能一词的首次使用", "C. 第一个专家系统的诞生", "D. 深度学习技术的兴起"], "ans": "ABC", "exp": "图灵测试、达特茅斯会议首次提出“人工智能”、早期专家系统都属于早期发展；深度学习是 21 世纪后的成果。"}, {"no": 67, "type": "multi", "q": "以下措施可以提高数据的机密性的有（ ）。", "opts": ["A. 使用强密码", "B. 实施访问控制策略", "C. 对敏感数据进行加密", "D. 定期更新软件补丁"], "ans": "ABC", "exp": "强密码、访问控制、加密直接保护机密性；定期更新补丁主要针对系统漏洞。"}, {"no": 68, "type": "multi", "q": "神经网络或理论对人工智能的发展产生了重要影响的有（ ）。", "opts": ["A. 符号主义", "B. 联结主义", "C. 行为主义", "D. 唯心主义"], "ans": "ABC", "exp": "人工智能三大学派：符号主义、联结主义、行为主义；“唯心主义”是哲学概念，不属于。"}, {"no": 69, "type": "multi", "q": "信息安全设备主要包括 ( )。", "opts": ["A. 防火墙", "B. 入侵检测", "C. 虚拟专用网络(VPN)", "D. 数据透视表"], "ans": "ABC", "exp": "防火墙、入侵检测、VPN 都是信息安全设备；数据透视表是 Excel 的数据分析工具。"}, {"no": 70, "type": "multi", "q": "以下措施可以帮助防御或减轻信息安全威胁的有（ ）。", "opts": ["A. 定期更新防病毒软件", "B. 使用加密通信协议", "C. 实施严格的访问控制", "D. 忽略来自未知来源的电子邮件"], "ans": "ABCD", "exp": "四项都是有效的防护/减轻威胁的措施。"}, {"no": 71, "type": "judge", "q": "硬盘是计算机的内存储器，它的存储容量一般比内存大。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "前半句错误：硬盘是「外存储器」（辅助存储器），不是内存储器。虽然硬盘容量通常确实比内存大，但整体表述错误。"}, {"no": 72, "type": "judge", "q": "在Windows中，按Delete键删除的文件会被永久删除，无法恢复。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "按 Delete 删除的文件通常进入回收站，可以从回收站还原；按 Shift+Delete 才是永久删除。"}, {"no": 73, "type": "judge", "q": "信息技术的发展完全由技术推动，与社会需求无关。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "信息技术的发展既受技术推动，也由社会需求拉动，二者相互促进。"}, {"no": 74, "type": "judge", "q": "信息社会的特征之一是信息过载，这对人们来说是完全不利的。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "信息过载会带来困扰，但并非“完全不利”，合理筛选与利用信息可化挑战为机遇。"}, {"no": 75, "type": "judge", "q": "在资源管理器中，按住Ctrl键单击可以选定不连续的多个文件。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "Ctrl+单击可选定不连续的多个文件；Shift+单击选定连续的一片文件。"}, {"no": 76, "type": "judge", "q": "计算机网络的性能与它的拓扑结构无关，与它的组成设备性能有关。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "网络性能既与设备性能有关，也与拓扑结构密切相关（如星型、网状可靠性不同）。"}, {"no": 77, "type": "judge", "q": "通过 IP 协议实现网络与网络之间的互联。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "IP 协议是网络层核心协议，正是它实现了网络与网络之间的互联。"}, {"no": 78, "type": "judge", "q": "在LAN、WAN、MAN三种网络中，误码率最低、可靠性最高的是LAN。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "局域网覆盖范围小、线路质量好，通常误码率最低、可靠性最高。"}, {"no": 79, "type": "judge", "q": "网桥工作在 OSI 体系的传输层。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "网桥工作在数据链路层，用于连接两个局域网段；传输层是 TCP/UDP 所在层。"}, {"no": 80, "type": "judge", "q": "域名最右边的部分是顶级域名。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "域名从右到左层级递减，最右边是顶级域名，如 sina.com.cn 中的 cn。"}, {"no": 81, "type": "judge", "q": "广域网和互联网一般都采用环形拓扑结构。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "广域网和互联网通常采用网状（不规则）拓扑，以提高可靠性，而非环形。"}, {"no": 82, "type": "judge", "q": "IP 地址共有 5 类，每类地址用户都能使用。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "IP 地址分 A~E 五类，但 D 类用于组播、E 类保留科研，普通主机一般只能用 A、B、C 类。"}, {"no": 83, "type": "judge", "q": "网络协作平台都需要用户具备专业的网络知识才能使用。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "网络协作平台强调易用性，普通用户经过简单学习即可使用，不需要专业知识。"}, {"no": 84, "type": "judge", "q": "在有道云协作中，团队成员的权限一旦确定就不能再更改。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "协作平台中成员权限可由管理员随时调整变更。"}, {"no": 85, "type": "judge", "q": "总线形拓扑结构中若某个结点故障会引起全网故障，安全性能差。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "总线型拓扑中单个结点故障一般不影响全网；环型拓扑才容易因单点故障影响全网。"}, {"no": 86, "type": "judge", "q": "中继器在网络中可以放大信号，扩大传输距离。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "中继器工作在物理层，对衰减信号进行放大整形，从而延长传输距离。"}, {"no": 87, "type": "judge", "q": "数字签名可以用于确保信息的完整性和不可否认性。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "数字签名可验证信息未被篡改（完整性）并确认发送方身份（不可否认性）。"}, {"no": 88, "type": "judge", "q": "智能家居仅包括智能锁和智能开关。", "opts": ["A. 正确", "B. 错误"], "ans": "B", "exp": "智能家居还包括智能照明、安防、家电控制、环境监测等，范围远不止这两种。"}, {"no": 89, "type": "judge", "q": "《密码法》规范密码应用和管理，促进密码事业发展。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "《中华人民共和国密码法》于 2020 年 1 月 1 日起施行，目的正是规范密码应用与管理。"}, {"no": 90, "type": "judge", "q": "在电子商务领域，机器学习主要用于个性化推荐系统。", "opts": ["A. 正确", "B. 错误"], "ans": "A", "exp": "电商广泛用机器学习做用户画像与个性化推荐，“猜你喜欢”即为典型。"}, {"no": 91, "type": "blank", "q": "在 Windows 10 中，文件和文件名不能超过______个字符。", "opts": [], "ans": "255", "exp": "Windows 采用 NTFS 文件系统时，文件名最长可达 255 个字符。"}, {"no": 92, "type": "blank", "q": "表示计算机辅助设计的英文简称是______。", "opts": [], "ans": "CAD", "exp": "CAD = Computer Aided Design，计算机辅助设计。"}, {"no": 93, "type": "blank", "q": "计算机辅助教学的英文简称是______。", "opts": [], "ans": "CAI", "exp": "CAI = Computer Aided Instruction，计算机辅助教学。"}, {"no": 94, "type": "blank", "q": "网址“https://www.sina.com.cn”的顶级域名是______。", "opts": [], "ans": "cn", "exp": "域名从右往左看，最右边的 cn 是顶级域名（国家顶级域名，代表中国）。"}, {"no": 95, "type": "blank", "q": "在网络体系结构中，TCP/IP 模型的最高层是______。", "opts": [], "ans": "应用层", "exp": "TCP/IP 四层模型自下而上：网络接口层、网络层、传输层、应用层，最高层是应用层。"}, {"no": 96, "type": "blank", "q": "有个 IP 地址是 200.150.240.224，其对应的主机号是______。", "opts": [], "ans": "224|0.0.0.224", "exp": "200 开头是 C 类地址，默认掩码 255.255.255.0，网络号是 200.150.240，主机号是最后一段 224。"}, {"no": 97, "type": "blank", "q": "数据归一化是一种重要的________方法。", "opts": [], "ans": "数据预处理", "exp": "归一化把数据按比例缩放到统一区间，是数据预处理中常用的一步。"}, {"no": 98, "type": "blank", "q": "大数据常用 4 个 V 概括核心特征，因此又被称为____ V 特征。", "opts": [], "ans": "4|四", "exp": "即 4V：Volume、Velocity、Variety、Value。"}, {"no": 99, "type": "blank", "q": "大数据采集的数据源主要包括传感器数据、________、网络数据、日志文件等。", "opts": [], "ans": "社交媒体数据|业务数据|互联网数据", "exp": "常见数据源包括传感器数据、社交媒体数据、网络数据、日志文件、业务数据等，填“社交媒体数据”最典型。"}, {"no": 100, "type": "blank", "q": "把分析结果以图形方式直观呈现的技术称为数据____。", "opts": [], "ans": "可视化", "exp": "数据可视化用图表直观展示分析结果，便于理解。"}, {"no": 101, "type": "essay", "q": "101. 请写出 TCP/IP 模型 4 层模型的名称。（10 分）\n第 4 层：____\n第 3 层：____\n第 2 层：____\n第 1 层：____", "opts": [], "ans": "自下而上（第1层→第4层）：\n第 1 层：网络接口层\n第 2 层：网络层\n第 3 层：传输层\n第 4 层：应用层", "exp": "TCP/IP 四层模型自下而上依次是：网络接口层（又称链路层）→网络层（IP 层）→传输层（TCP/UDP）→应用层。本题要求从第 4 层往下填，注意别与 OSI 七层模型（物理层、数据链路层、网络层、传输层、会话层、表示层、应用层）混淆——这正是第 28、95 题的考点。"}, {"no": 102, "type": "essay", "q": "102. 请写出大数据“4V”的中文名称。（10 分）", "opts": [], "ans": "大量（Volume）、高速（Velocity）、多样（Variety）、价值（Value）", "exp": "大数据 4V：Volume 大量（数据规模大）、Velocity 高速（处理速度快）、Variety 多样（类型多，含结构化/半结构化/非结构化）、Value 价值（价值密度低但蕴含大价值）。有的版本再加 Veracity 真实性成为 5V——对应第 39、98 题。"}, {"no": 103, "type": "essay", "q": "103. 网络应用（机房子网划分）（10 分）\n学校机房使用 C 类地址 192.168.3.0，需划分为 4 个子网供各小组使用。\n① 需向主机位借用 ____ 位，才能划分出至少 4 个子网？\n② 划分后的新子网掩码（点分十进制）是 ____\n③ 第 2 个子网的可用主机 IP 地址范围是 ____\n④ IP 地址 192.168.3.77 属于第 ____ 个子网？\n⑤ 每个子网的有效主机数是 ____ 台？\n⑥ 192.168.3.77 所在子网的直接广播地址是 ____", "opts": [], "ans": "① 借 2 位（2²=4 个子网）\n② 新子网掩码：255.255.255.192（即 /26）\n③ 第 2 个子网可用主机 IP：192.168.3.65 ~ 192.168.3.126\n④ 192.168.3.77 属于第 2 个子网\n⑤ 每个子网有效主机数：62 台（2⁶−2）\n⑥ 192.168.3.77 所在子网的直接广播地址：192.168.3.127", "exp": "C 类地址 192.168.3.0 默认掩码 /24（255.255.255.0）。\n① 要划分 4 个子网，需借 n 位使 2ⁿ≥4，故借 2 位。\n② 掩码变为 /24+2=/26，即 255.255.255.192（最后一段 11000000）。\n③ 每个子网地址块大小 = 256−192 = 64：四个子网依次为 .0/.64/.128/.192 开头；第 2 子网是 192.168.3.64/26，网络号 .64、广播 .127，可用主机 .65~.126。\n④ .77 落在 .64~.127 之间，属第 2 个子网。\n⑤ 每子网 2⁶ 个地址，去掉网络号与广播地址，有效主机 64−2=62 台。\n⑥ 第 2 子网广播地址为 192.168.3.127。"}];
+
+const STUDENTS = [{"id": "2025001", "name": "陈博杰"}, {"id": "2025002", "name": "陈嘉伟"}, {"id": "2025003", "name": "陈凯棋"}, {"id": "2025004", "name": "陈晓璐"}, {"id": "2025005", "name": "陈羽韩"}, {"id": "2025006", "name": "陈紫欣"}, {"id": "2025007", "name": "程伟杰"}, {"id": "2025008", "name": "邓志"}, {"id": "2025009", "name": "何静"}, {"id": "2025010", "name": "黄凯杰"}, {"id": "2025011", "name": "黄晓伟"}, {"id": "2025012", "name": "李航"}, {"id": "2025013", "name": "林静静"}, {"id": "2025014", "name": "林烨凯"}, {"id": "2025015", "name": "林泽豪"}, {"id": "2025016", "name": "林志灵"}, {"id": "2025017", "name": "凌峰"}, {"id": "2025018", "name": "刘晨希"}, {"id": "2025019", "name": "刘椿尧"}, {"id": "2025020", "name": "刘智伟"}, {"id": "2025021", "name": "倪皓轩"}, {"id": "2025022", "name": "沈金龙"}, {"id": "2025023", "name": "宋海龙"}, {"id": "2025024", "name": "宋政烨"}, {"id": "2025025", "name": "王依晨"}, {"id": "2025026", "name": "翁晨辉"}, {"id": "2025027", "name": "谢志豪"}, {"id": "2025028", "name": "颜琦镔"}, {"id": "2025029", "name": "叶睿晨"}, {"id": "2025030", "name": "游子鹏"}, {"id": "2025031", "name": "张亿乐"}, {"id": "2025032", "name": "赵伟坤"}, {"id": "2025033", "name": "郑杨鸿"}, {"id": "2025034", "name": "郑子添"}, {"id": "2025035", "name": "朱炫杰"}, {"id": "2025036", "name": "朱紫寒"}];
+
+/* ===================== 状态 ===================== */
+let cur = 0;
+let answered = {};      // no -> 'ok' | 'no'
+let answerShown = {};   // no -> bool
+let selected = new Set();
+let drawnSet = new Set();
+let rollTimer = null;
+let filter = 'all';
+let audioCtx = null;
+
+const TYPES = {
+  single:{name:'单选题',score:1}, multi:{name:'多选题',score:2},
+  judge:{name:'判断题',score:1}, blank:{name:'填空题',score:2}, essay:{name:'综合题',score:10}
+};
+
+/* ===================== DOM ===================== */
+const $ = id => document.getElementById(id);
+const qNo=$('qNo'),qType=$('qType'),qScore=$('qScore'),qDone=$('qDone'),qStem=$('qStem'),
+  qOptions=$('qOptions'),writeArea=$('writeArea'),writeBox=$('writeBox'),submitRow=$('submitRow'),
+  answerPanel=$('answerPanel'),ansVal=$('ansVal'),expVal=$('expVal'),numGrid=$('numGrid');
+
+/* ===================== 导航/筛选 ===================== */
+function buildTabs(){
+  const counts={all:QUESTIONS.length,single:0,multi:0,judge:0,blank:0,essay:0};
+  QUESTIONS.forEach(q=>counts[q.type]++);
+  const defs=[['all','全部'],['single','单选'],['multi','多选'],['judge','判断'],['blank','填空'],['essay','综合']];
+  $('typeTabs').innerHTML=defs.map(([k,n])=>
+    `<button class="tab ${k===filter?'active':''}" data-f="${k}">${n}<span class="cnt">${counts[k]}</span></button>`).join('');
+  $('typeTabs').querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    filter=t.dataset.f;
+    const idx=QUESTIONS.findIndex(q=>filter==='all'||q.type===filter);
+    if(idx>=0) go(idx); else buildTabs();
+  });
+}
+
+function buildNumGrid(){
+  numGrid.innerHTML=QUESTIONS.map((q,i)=>
+    `<button class="num" data-i="${i}">${q.no}</button>`).join('');
+  numGrid.querySelectorAll('.num').forEach(b=>b.onclick=()=>go(+b.dataset.i));
+  updateNumGrid();
+}
+function updateNumGrid(){
+  numGrid.querySelectorAll('.num').forEach((b,i)=>{
+    b.className='num';
+    if(i===cur) b.classList.add('active');
+    else if(answered[QUESTIONS[i].no]==='ok') b.classList.add('ok');
+    else if(answered[QUESTIONS[i].no]==='no') b.classList.add('no');
+  });
+}
+
+function go(i){
+  if(i<0||i>=QUESTIONS.length) return;
+  stopSpeak();
+  cur=i; selected.clear();
+  render();
+}
+
+/* ===================== 渲染题目 ===================== */
+function render(){
+  const q=QUESTIONS[cur], t=TYPES[q.type];
+  qNo.textContent=`第 ${q.no} 题`;
+  qType.textContent=t.name;
+  qScore.textContent=t.score+' 分';
+  qDone.style.display=answered[q.no]?'inline-block':'none';
+  qStem.textContent=q.q;
+  $('progressText').textContent=`${cur+1} / ${QUESTIONS.length}`;
+  answerPanel.classList.toggle('show',!!answerShown[q.no]);
+  $('btnToggleAns').textContent=answerShown[q.no]?'🙈 隐藏答案解析':'💡 显示答案解析';
+
+  const isWrite=(q.type==='blank'||q.type==='essay');
+  qOptions.style.display=isWrite?'none':'grid';
+  writeArea.style.display=isWrite?'flex':'none';
+  submitRow.style.display=q.type==='multi'?'flex':'none';
+  qOptions.classList.toggle('single-col',q.type==='judge');
+
+  if(isWrite){
+    if(q.type==='blank'){
+      writeBox.innerHTML=`<div class="write-label">请在横线上填入正确内容</div>`+
+        q.q.split('______').join('<span class="blank-ans">＿＿＿＿</span>');
+    }else{
+      writeBox.innerHTML=`<div class="write-label">综合题 · 请按题目要求作答</div><div style="white-space:pre-wrap">${q.q}</div>`;
+    }
+  }else{
+    qOptions.innerHTML=q.opts.map((o,i)=>{
+      const letter=String.fromCharCode(65+i);
+      return `<button class="opt" data-i="${i}"><span class="key">${letter}</span><span>${o.replace(/^[A-Z]\.\s*/,'')}</span></button>`;
+    }).join('');
+    qOptions.querySelectorAll('.opt').forEach(b=>b.onclick=()=>onPickOpt(+b.dataset.i));
+    // 若已作答，恢复状态
+    if(answered[q.no]) applyAnswered(q);
+  }
+  ansVal.textContent=q.ans.replace(/\n/g,' ');
+  expVal.textContent=q.exp;
+  updateNumGrid();
+}
+
+function onPickOpt(i){
+  const q=QUESTIONS[cur];
+  if(answered[q.no]) return;
+  if(q.type==='multi'){
+    const letter=String.fromCharCode(65+i);
+    if(selected.has(letter)) selected.delete(letter); else selected.add(letter);
+    const b=qOptions.querySelector(`[data-i="${i}"]`);
+    b.classList.toggle('correct',selected.has(letter));
+    b.querySelector('.key').style.background=selected.has(letter)?'var(--blue)':'';
+    b.querySelector('.key').style.color=selected.has(letter)?'#fff':'';
+    return;
+  }
+  checkAnswer(String.fromCharCode(65+i));
+}
+
+function checkAnswer(userAns){
+  const q=QUESTIONS[cur];
+  const correct=q.ans.split('|')[0].trim().toUpperCase();
+  const norm=s=>[...s].filter(c=>/[A-Z]/.test(c)).sort().join('');
+  const ok=norm(userAns)===norm(correct);
+  answered[q.no]=ok?'ok':'no';
+  answerShown[q.no]=true;
+  showResult(ok,correct,userAns);
+}
+
+function applyAnswered(q){
+  const correct=q.ans.split('|')[0].trim().toUpperCase();
+  qOptions.querySelectorAll('.opt').forEach((b,i)=>{
+    const letter=String.fromCharCode(65+i);
+    b.classList.add('locked');
+    if(correct.includes(letter)) b.classList.add('correct');
+    else b.classList.add('dim');
+  });
+}
+
+function showResult(ok,correct,userAns){
+  const q=QUESTIONS[cur];
+  const chosen=new Set([...(userAns||'')].filter(c=>/[A-Z]/.test(c)));
+  // 高亮选项：正确答案绿色✓，学生误选红色✗，其余变暗
+  qOptions.querySelectorAll('.opt').forEach((b,i)=>{
+    const letter=String.fromCharCode(65+i);
+    b.classList.add('locked');
+    if(correct.includes(letter)){
+      b.classList.add('correct');
+      b.insertAdjacentHTML('beforeend','<span class="mark-ok">✓ 答案</span>');
+    }else if(chosen.has(letter)){
+      b.classList.add('wrong');
+      b.insertAdjacentHTML('beforeend','<span class="mark-no">✗ 误选</span>');
+    }else{
+      b.classList.add('dim');
+    }
+  });
+  qDone.style.display='inline-block';
+  answerPanel.classList.add('show');
+  $('btnToggleAns').textContent='🙈 隐藏答案解析';
+  updateNumGrid();
+  sfx(ok?'correct':'wrong');
+  // 对错音色反馈：正确用高音调欢快音色，错误用低音调提示音色
+  const say=ok?'回答正确，太棒了！':'回答错误，正确答案是'+correct.split('').join(' ');
+  speak(say,{correct:ok});
+  toast(ok?'✓ 回答正确！':'✗ 回答错误，请看解析',ok?'ok':'no');
+}
+
+/* ===================== 解析显隐/朗读 ===================== */
+$('btnToggleAns').onclick=()=>{
+  const q=QUESTIONS[cur];
+  answerShown[q.no]=!answerShown[q.no];
+  answerPanel.classList.toggle('show',answerShown[q.no]);
+  $('btnToggleAns').textContent=answerShown[q.no]?'🙈 隐藏答案解析':'💡 显示答案解析';
+};
+
+/* ===================== 朗读引擎 ===================== */
+const cfg={
+  engine:localStorage.getItem('cw_engine')||'freevolc',
+  freeVoice:localStorage.getItem('cw_freevoice')||'zh_female_qingxin',
+  rate:+(localStorage.getItem('cw_rate')||1.0),
+  pitch:+(localStorage.getItem('cw_pitch')||1.0),
+  voiceURI:localStorage.getItem('cw_voice')||'',
+  appid:localStorage.getItem('cw_appid')||'',
+  token:localStorage.getItem('cw_token')||'',
+  cluster:localStorage.getItem('cw_cluster')||'volcano_tts',
+  voice:localStorage.getItem('cw_voice2')||'BV700_streaming',
+  sfx:localStorage.getItem('cw_sfx')!=='0'
+};
+
+let voices=[];
+function loadVoices(){
+  voices=speechSynthesis.getVoices().filter(v=>/zh|cmn/i.test(v.lang));
+  const sel=$('voiceSelect');
+  sel.innerHTML=voices.map(v=>`<option value="${v.voiceURI}">${v.name} (${v.lang})</option>`).join('')||'<option>暂无中文语音</option>';
+  if(cfg.voiceURI&&[...sel.options].some(o=>o.value===cfg.voiceURI)) sel.value=cfg.voiceURI;
+}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+
+function stopSpeak(){try{speechSynthesis.cancel()}catch(e){} if(typeof freeAudio!=='undefined'&&freeAudio){try{freeAudio.pause()}catch(e){}freeAudio=null;} }
+
+function browserSpeak(text,opt={}){
+  if(!('speechSynthesis' in window)){toast('当前浏览器不支持语音朗读');return;}
+  stopSpeak();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN';
+  u.rate=cfg.rate*(opt.correct===false?0.95:1);
+  u.pitch=(opt.pitch||cfg.pitch)*(opt.correct===true?1.18:opt.correct===false?0.82:1);
+  if(cfg.voiceURI){const v=voices.find(v=>v.voiceURI===cfg.voiceURI);if(v)u.voice=v;}
+  speechSynthesis.speak(u);
+}
+
+/* ---- 火山引擎 WebSocket (ws_binary v1) ---- */
+let volcanoReady=false, volcanoWS=null, volcanoQueue=[], audioChunks=[], pendingAudioName='';
+function ensureVolcano(){
+  return new Promise((resolve,reject)=>{
+    if(volcanoWS&&volcanoWS.readyState===WebSocket.OPEN){resolve(true);return;}
+    if(!cfg.appid||!cfg.token){reject(new Error('缺少AppID或Token'));return;}
+    try{
+      const ws=new WebSocket('wss://openspeech.bytedance.com/api/v1/tts/ws_binary');
+      ws.binaryType='arraybuffer';
+      volcanoWS=ws;
+      ws.onopen=()=>{volcanoReady=true;resolve(true);};
+      ws.onerror=e=>{volcanoReady=false;reject(new Error('连接失败'));};
+      ws.onmessage=ev=>{
+        const d=new Uint8Array(ev.data);
+        const headerSize=(d[0]&0x0f)*4;
+        const msgType=d[1]>>4;
+        let off=headerSize;
+        if(msgType===15){toast('火山TTS鉴权失败，请检查配置');return;}
+        if(msgType===9){
+          const len=((d[off]<<24)|(d[off+1]<<16)|(d[off+2]<<8)|d[off+3])>>>0;
+          off+=4;
+          try{const meta=JSON.parse(new TextDecoder().decode(d.slice(off,off+len)));
+            if(meta.code!==1000){toast('火山TTS：'+(meta.message||'合成失败'));return;}
+          }catch(e){}
+          off+=len;
+        }
+        const chunk=d.slice(off);
+        if(chunk.length) audioChunks.push(chunk);
+      };
+      ws.onclose=()=>{volcanoReady=false;};
+    }catch(e){reject(e);}
+  });
+}
+function volcanoSpeak(text,opt={}){
+  ensureVolcano().then(()=>{
+    audioChunks=[];
+    const voice=(cfg.voice==='custom'?cfg.vCustom:cfg.voice)||'BV700_streaming';
+    const payload={
+      app:{appid:cfg.appid,token:cfg.token,cluster:cfg.cluster},
+      user:{uid:'classroom'},
+      audio:{voice_type:voice,encoding:'mp3',speed_ratio:cfg.rate,
+        volume_ratio:1.0,pitch_ratio:opt.pitch||cfg.pitch*(opt.correct===true?1.15:opt.correct===false?0.85:1)},
+      request:{reqid:'r'+Date.now()+Math.random().toString(36).slice(2),text:text,text_type:'plain',operation:'query'}
+    };
+    const body=new TextEncoder().encode(JSON.stringify(payload));
+    const head=new Uint8Array([0x11,0x10,0x10,0x00]);
+    const msg=new Uint8Array(4+body.length);msg.set(head);msg.set(body,4);
+    volcanoWS.send(msg);
+    // 等待音频收齐后播放
+    let last=0;
+    const check=setInterval(()=>{
+      if(audioChunks.length&&audioChunks.length===last){
+        clearInterval(check);
+        const total=audioChunks.reduce((s,c)=>s+c.length,0);
+        const blob=new Blob(audioChunks,{type:'audio/mp3'});
+        const url=URL.createObjectURL(blob);
+        const a=new Audio(url);a.play().catch(()=>{});
+      }
+      last=audioChunks.length;
+    },120);
+    setTimeout(()=>clearInterval(check),8000);
+  }).catch(e=>{toast('火山TTS不可用，已切换浏览器语音');cfg.engine='browser';browserSpeak(text,opt);});
+}
+
+/* ---- 火山免费音色（translate.volcengine.com 公开接口，免鉴权） ---- */
+let freeAudio=null; // 当前正在播放的免费火山音频，便于打断
+function b64ToAudioBytes(b64){
+  const bin=atob(b64);const arr=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+  return arr;
+}
+function playBytes(bytes,opt={}){
+  if(freeAudio){try{freeAudio.pause()}catch(e){}freeAudio=null;}
+  const blob=new Blob([bytes],{type:'audio/mp3'});
+  const url=URL.createObjectURL(blob);
+  const a=new Audio(url);freeAudio=a;
+  a.onended=()=>{URL.revokeObjectURL(url);if(freeAudio===a)freeAudio=null;};
+  return a.play();
+}
+async function freeVolcSpeak(text,opt={}){
+  const FV_HEADERS={
+    'Content-Type':'application/json',
+    'Accept-Language':'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7',
+    'Origin':'chrome-extension://klgfhbiooeogdfodpopgppeadghjjemk',
+    'Pragma':'no-cache','Cache-Control':'no-cache',
+    'accept':'application/json, text/plain, */*',
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+  };
+  // 该接口对纯中文串偶发 400：先尝试原文，失败则补一个空格前缀重试，再失败降级浏览器
+  const attempts=[text, text.replace(/([，。？！、；：])/g,'$1 '), ' '+text];
+  for(const t of attempts){
+    try{
+      const r=await fetch('https://translate.volcengine.com/crx/tts/v1/',{
+        method:'POST',headers:FV_HEADERS,
+        body:JSON.stringify({text:t,speaker:cfg.freeVoice,language:'zh'})
+      });
+      const d=await r.json();
+      const data=d&&d.audio&&d.audio.data;
+      if(data){
+        await playBytes(b64ToAudioBytes(data),opt);
+        return true;
+      }
+    }catch(e){}
+  }
+  // 全部失败：降级浏览器语音
+  browserSpeak(text,opt);
+  return false;
+}
+
+function speak(text,opt={}){
+  if(cfg.engine==='freevolc') freeVolcSpeak(text,opt);
+  else if(cfg.engine==='volcano'&&cfg.appid&&cfg.token) volcanoSpeak(text,opt);
+  else browserSpeak(text,opt);
+}
+function stopSpeakAll(){try{speechSynthesis.cancel()}catch(e){} if(freeAudio){try{freeAudio.pause()}catch(e){}freeAudio=null;}}
+
+/* ---- 音效 ---- */
+function sfx(type){
+  if(!cfg.sfx)return;
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const seq=type==='correct'?[[660,0],[880,.12],[1174,.24]]:
+              type==='wrong'?[[300,0],[220,.16]]:
+              type==='ding'?[[1320,0],[1760,.08]]:[[880,0]];
+    seq.forEach(([f,t])=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type=type==='wrong'?'sawtooth':'sine';o.frequency.value=f;
+      const s=audioCtx.currentTime+t;
+      g.gain.setValueAtTime(0.0001,s);g.gain.exponentialRampToValueAtTime(.22,s+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,s+.28);
+      o.connect(g);g.connect(audioCtx.destination);o.start(s);o.stop(s+.3);
+    });
+  }catch(e){}
+}
+
+/* ===================== 朗读题目/解析 ===================== */
+function readQuestion(){
+  const q=QUESTIONS[cur];
+  const clean=q.q.replace(/[。.\s]+$/,'');
+  let text=`第${q.no}题，${clean}。`;
+  if(q.opts&&q.opts.length) text+='选项：'+q.opts.map((o,i)=>String.fromCharCode(65+i)+'，'+o.replace(/^[A-Z]\.\s*/,'')).join('；');
+  speak(text);
+}
+$('btnRead').onclick=readQuestion;
+$('btnReadAns').onclick=()=>{
+  const q=QUESTIONS[cur];
+  speak(`正确答案，${q.ans.replace(/\n/g,'，')}。解析：${q.exp.replace(/\n/g,'，')}`);
+};
+
+/* ===================== 随机抽人 ===================== */
+function rollPick(){
+  const avail=STUDENTS.map((s,i)=>i).filter(i=>!drawnSet.has(i));
+  const pool=avail.length?avail:STUDENTS.map((s,i)=>i);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function startRoll(){
+  clearInterval(rollTimer);
+  $('pickBox').classList.add('rolling');
+  $('rollId').innerHTML='&nbsp;';
+  let n=0;
+  rollTimer=setInterval(()=>{
+    $('rollName').textContent=STUDENTS[Math.floor(Math.random()*STUDENTS.length)].name;
+    n++;
+    if(n>=22){
+      clearInterval(rollTimer);
+      const idx=rollPick();
+      const stu=STUDENTS[idx];
+      drawnSet.add(idx);
+      $('pickBox').classList.remove('rolling');
+      $('rollName').textContent=stu.name;
+      $('rollId').textContent='学号 '+stu.id;
+      $('drawnCount').textContent=drawnSet.size;
+      sfx('ding');
+      speak(`有请 ${stu.name} 同学，作答第 ${QUESTIONS[cur].no} 题`);
+    }
+  },70);
+}
+$('btnPick').onclick=()=>{$('pickModal').classList.add('show');startRoll();};
+$('btnRollAgain').onclick=startRoll;
+$('btnClosePick').onclick=()=>{clearInterval(rollTimer);$('pickModal').classList.remove('show');stopSpeak();};
+$('btnResetDrawn').onclick=()=>{drawnSet.clear();$('drawnCount').textContent='0';toast('名单已重置');};
+
+/* ===================== 设置 ===================== */
+function openSettings(){
+  $('setModal').classList.add('show');
+  document.querySelectorAll('#engineSeg button').forEach(b=>b.classList.toggle('active',b.dataset.engine===cfg.engine));
+  $('browserBox').style.display=cfg.engine==='browser'?'block':'none';
+  $('volcanoBox').style.display=cfg.engine==='volcano'?'block':'none';
+  $('freevolcBox').style.display=cfg.engine==='freevolc'?'block':'none';
+  $('fvVoice').value=cfg.freeVoice;
+  $('vAppid').value=cfg.appid;$('vToken').value=cfg.token;$('vCluster').value=cfg.cluster;
+  $('vVoice').value=cfg.voice;if(cfg.voice==='custom')$('vCustomWrap').style.display='block';
+  $('vCustom').value=cfg.vCustom||'';
+  $('rateRange').value=cfg.rate;$('rateVal').textContent=cfg.rate;
+  $('pitchRange').value=cfg.pitch;$('pitchVal').textContent=cfg.pitch;
+  $('sfxCheck').checked=cfg.sfx;
+}
+function saveCfg(){localStorage.setItem('cw_engine',cfg.engine);localStorage.setItem('cw_rate',cfg.rate);
+  localStorage.setItem('cw_pitch',cfg.pitch);localStorage.setItem('cw_voice',cfg.voiceURI);
+  localStorage.setItem('cw_appid',cfg.appid);localStorage.setItem('cw_token',cfg.token);
+  localStorage.setItem('cw_cluster',cfg.cluster);localStorage.setItem('cw_voice2',cfg.voice);
+  localStorage.setItem('cw_freevoice',cfg.freeVoice);
+  localStorage.setItem('cw_vcustom',cfg.vCustom||'');localStorage.setItem('cw_sfx',cfg.sfx?'1':'0');}
+cfg.vCustom=localStorage.getItem('cw_vcustom')||'';
+
+$('btnSettings').onclick=openSettings;
+$('btnCloseSet').onclick=()=>{saveCfg();$('setModal').classList.remove('show');};
+document.querySelectorAll('#engineSeg button').forEach(b=>b.onclick=()=>{
+  cfg.engine=b.dataset.engine;
+  document.querySelectorAll('#engineSeg button').forEach(x=>x.classList.toggle('active',x===b));
+  $('browserBox').style.display=cfg.engine==='browser'?'block':'none';
+  $('volcanoBox').style.display=cfg.engine==='volcano'?'block':'none';
+  $('freevolcBox').style.display=cfg.engine==='freevolc'?'block':'none';
+});
+$('fvVoice').onchange=e=>{cfg.freeVoice=e.target.value;saveCfg();};
+$('voiceSelect').onchange=e=>{cfg.voiceURI=e.target.value;saveCfg();};
+$('rateRange').oninput=e=>{cfg.rate=+e.target.value;$('rateVal').textContent=cfg.rate;};
+$('pitchRange').oninput=e=>{cfg.pitch=+e.target.value;$('pitchVal').textContent=cfg.pitch;};
+$('vAppid').oninput=e=>cfg.appid=e.target.value.trim();
+$('vToken').oninput=e=>cfg.token=e.target.value.trim();
+$('vCluster').oninput=e=>cfg.cluster=e.target.value.trim();
+$('vVoice').onchange=e=>{cfg.voice=e.target.value;$('vCustomWrap').style.display=e.target.value==='custom'?'block':'none';};
+$('vCustom').oninput=e=>cfg.vCustom=e.target.value.trim();
+$('sfxCheck').onchange=e=>cfg.sfx=e.target.checked;
+$('btnTestVoice').onclick=()=>speak('同学们好，这是朗读音色的试听效果。');
+
+/* ===================== 其它交互 ===================== */
+$('btnPrev').onclick=()=>go(cur-1);
+$('btnNext').onclick=()=>go(cur+1);
+$('btnFull').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.();};
+$('btnSubmit').onclick=()=>{
+  if(selected.size===0){toast('请先选择答案');return;}
+  checkAnswer([...selected].sort().join(''));
+};
+let toastT;
+function toast(msg,cls){const t=$('toast');t.textContent=msg;t.className='toast show'+(cls?' '+cls:'');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast',2200);}
+document.addEventListener('keydown',e=>{
+  if($('pickModal').classList.contains('show')||$('setModal').classList.contains('show'))return;
+  if(e.key==='ArrowLeft')go(cur-1);
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key===' '){e.preventDefault();readQuestion();}
+});
+
+/* ===================== 初始化 ===================== */
+buildTabs();
+render();
+buildNumGrid();
+</script>
+</body>
+</html>
