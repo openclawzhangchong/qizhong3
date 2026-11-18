@@ -261,7 +261,7 @@
 <div class="modal" id="setModal">
   <div class="modal-box settings">
     <h2>⚙️ 朗读与音色设置</h2>
-    <p class="set-desc">朗读默认使用浏览器语音，即开即用；如需“火山引擎”公开音色，请填入控制台的 AppID / AccessToken 后切换。所有设置自动保存在本机。</p>
+    <p class="set-desc">默认使用火山免费音色朗读，音量已设为 100%；也可切换浏览器语音或火山官方 API。所有设置自动保存在本机。</p>
 
     <div class="field">
       <label>朗读引擎</label>
@@ -270,6 +270,11 @@
         <button data-engine="browser">浏览器语音</button>
         <button data-engine="volcano">火山官方 API</button>
       </div>
+    </div>
+
+    <div class="field">
+      <label>朗读音量 <span id="volumeVal">100%</span></label>
+      <input type="range" id="volumeRange" min="0" max="1" step="0.05" value="1.0">
     </div>
 
     <div class="volcano-box" id="freevolcBox">
@@ -517,6 +522,7 @@ const cfg={
   freeVoice:localStorage.getItem('cw_freevoice')||'zh_female_qingxin',
   rate:+(localStorage.getItem('cw_rate')||1.0),
   pitch:+(localStorage.getItem('cw_pitch')||1.0),
+  volume:localStorage.getItem('cw_volume')!==null?+(localStorage.getItem('cw_volume')):1.0,
   voiceURI:localStorage.getItem('cw_voice')||'',
   appid:localStorage.getItem('cw_appid')||'',
   token:localStorage.getItem('cw_token')||'',
@@ -543,6 +549,7 @@ function browserSpeak(text,opt={}){
   u.lang='zh-CN';
   u.rate=cfg.rate*(opt.correct===false?0.95:1);
   u.pitch=(opt.pitch||cfg.pitch)*(opt.correct===true?1.18:opt.correct===false?0.82:1);
+  u.volume=cfg.volume;
   if(cfg.voiceURI){const v=voices.find(v=>v.voiceURI===cfg.voiceURI);if(v)u.voice=v;}
   speechSynthesis.speak(u);
 }
@@ -588,7 +595,7 @@ function volcanoSpeak(text,opt={}){
       app:{appid:cfg.appid,token:cfg.token,cluster:cfg.cluster},
       user:{uid:'classroom'},
       audio:{voice_type:voice,encoding:'mp3',speed_ratio:cfg.rate,
-        volume_ratio:1.0,pitch_ratio:opt.pitch||cfg.pitch*(opt.correct===true?1.15:opt.correct===false?0.85:1)},
+        volume_ratio:cfg.volume,pitch_ratio:opt.pitch||cfg.pitch*(opt.correct===true?1.15:opt.correct===false?0.85:1)},
       request:{reqid:'r'+Date.now()+Math.random().toString(36).slice(2),text:text,text_type:'plain',operation:'query'}
     };
     const body=new TextEncoder().encode(JSON.stringify(payload));
@@ -622,7 +629,7 @@ function playBytes(bytes,opt={}){
   if(freeAudio){try{freeAudio.pause()}catch(e){}freeAudio=null;}
   const blob=new Blob([bytes],{type:'audio/mp3'});
   const url=URL.createObjectURL(blob);
-  const a=new Audio(url);freeAudio=a;
+  const a=new Audio(url);a.volume=cfg.volume;freeAudio=a;
   a.onended=()=>{URL.revokeObjectURL(url);if(freeAudio===a)freeAudio=null;};
   return a.play();
 }
@@ -742,10 +749,11 @@ function openSettings(){
   $('vCustom').value=cfg.vCustom||'';
   $('rateRange').value=cfg.rate;$('rateVal').textContent=cfg.rate;
   $('pitchRange').value=cfg.pitch;$('pitchVal').textContent=cfg.pitch;
+  $('volumeRange').value=cfg.volume;$('volumeVal').textContent=Math.round(cfg.volume*100)+'%';
   $('sfxCheck').checked=cfg.sfx;
 }
 function saveCfg(){localStorage.setItem('cw_engine',cfg.engine);localStorage.setItem('cw_rate',cfg.rate);
-  localStorage.setItem('cw_pitch',cfg.pitch);localStorage.setItem('cw_voice',cfg.voiceURI);
+  localStorage.setItem('cw_pitch',cfg.pitch);localStorage.setItem('cw_volume',cfg.volume);localStorage.setItem('cw_voice',cfg.voiceURI);
   localStorage.setItem('cw_appid',cfg.appid);localStorage.setItem('cw_token',cfg.token);
   localStorage.setItem('cw_cluster',cfg.cluster);localStorage.setItem('cw_voice2',cfg.voice);
   localStorage.setItem('cw_freevoice',cfg.freeVoice);
@@ -765,6 +773,7 @@ $('fvVoice').onchange=e=>{cfg.freeVoice=e.target.value;saveCfg();};
 $('voiceSelect').onchange=e=>{cfg.voiceURI=e.target.value;saveCfg();};
 $('rateRange').oninput=e=>{cfg.rate=+e.target.value;$('rateVal').textContent=cfg.rate;};
 $('pitchRange').oninput=e=>{cfg.pitch=+e.target.value;$('pitchVal').textContent=cfg.pitch;};
+$('volumeRange').oninput=e=>{cfg.volume=+e.target.value;$('volumeVal').textContent=Math.round(cfg.volume*100)+'%';};
 $('vAppid').oninput=e=>cfg.appid=e.target.value.trim();
 $('vToken').oninput=e=>cfg.token=e.target.value.trim();
 $('vCluster').oninput=e=>cfg.cluster=e.target.value.trim();
